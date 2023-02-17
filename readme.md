@@ -1,1 +1,1 @@
-low 
+#!/bin/bash
