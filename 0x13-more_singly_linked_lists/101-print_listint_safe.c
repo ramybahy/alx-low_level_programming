@@ -1,29 +1,89 @@
 #include "lists.h"
+#include <stdio.h>
+
+size_t looped_listint_len(const listint_t *head);
+size_t print_listint_safe(const listint_t *head);
 
 /**
- * print_listint_safe - print  listint_t linked list
- * @head: pointer to the list head
- * Return:  number of nodes in a list
+ * looped_listint_len - Counts the number of nodes
+ * in a listint_t linked list.
+ * @head: pointer to head listint_t
+ *
+ * Return: If list not looped - 0.
+ * else - number of nodes in list
+ */
+size_t looped_listint_len(const listint_t *head)
+{
+ const listint_t *tortoise, *hare;
+ size_t nodes = 1;
+
+ if (head == NULL || head->next == NULL)
+ return (0);
+
+ tortoise = head->next;
+ hare = (head->next)->next;
+
+ while (hare)
+ {
+ if (tortoise == hare)
+ {
+ tortoise = head;
+ while (tortoise != hare)
+ {
+ nodes++;
+ tortoise = tortoise->next;
+ hare = hare->next;
+ }
+
+ tortoise = tortoise->next;
+ while (tortoise != hare)
+ {
+ nodes++;
+ tortoise = tortoise->next;
+ }
+
+ return (nodes);
+ }
+
+ tortoise = tortoise->next;
+ hare = (hare->next)->next;
+ }
+
+ return (0);
+}
+
+/**
+ * print_listint_safe - Prints  listint_t list safe
+ * @head: pointer to head listint_t list.
+ *
+ * Return: nodes number in list.
  */
 size_t print_listint_safe(const listint_t *head)
 {
-	size_t i;
-	const listint_t *tmp;
+ size_t nodes, index = 0;
 
-	if (head == NULL)
-		exit(98);
+ nodes = looped_listint_len(head);
 
-	for (i = 0; head; i++)
-	{
-		printf("[%p] %d\n", (void *)head, head->n);
-		tmp = head;
-		head = head->next;
-		if (tmp <= head)
-		{
-			printf("-> [%p] %d\n", (void *)head, head->n);
-			break;
-		}
-	}
+ if (nodes == 0)
+ {
+ for (; head != NULL; nodes++)
+ {
+ printf("[%p] %d\n", (void *)head, head->n);
+ head = head->next;
+ }
+ }
 
-	return (i);
+ else
+ {
+ for (index = 0; index < nodes; index++)
+ {
+ printf("[%p] %d\n", (void *)head, head->n);
+ head = head->next;
+ }
+
+ printf("-> [%p] %d\n", (void *)head, head->n);
+ }
+
+ return (nodes);
 }
+
