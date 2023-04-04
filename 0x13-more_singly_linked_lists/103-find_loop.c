@@ -2,34 +2,32 @@
 
 /**
  * find_listint_loop - find loop in linked list
- * @head: search for linked list
- *
- * Return: node loop start address, or NULL
+ * @head: pointer to the list head
+ * Return: address of node where
+ * loop starts, or NULL if no
+ * loop
  */
 listint_t *find_listint_loop(listint_t *head)
 {
- listint_t *slow = head;
- listint_t *fast = head;
+	listint_t *tmp, *tmp2;
 
- if (!head)
- return (NULL);
+	if (head == NULL)
+		return (NULL);
 
- while (slow && fast && fast->next)
- {
- fast = fast->next->next;
- slow = slow->next;
- if (fast == slow)
- {
- slow = head;
- while (slow != fast)
- {
- slow = slow->next;
- fast = fast->next;
- }
- return (fast);
- }
- }
+	tmp = head;
+	while (tmp)
+	{
+		tmp2 = tmp->next;
+		while (tmp2)
+		{
+			if (tmp2 == tmp)
+				return (tmp);
+			tmp2 = tmp2->next;
+		}
+		tmp = tmp->next;
+	}
 
- return (NULL);
+	return (NULL);
 }
+
 
