@@ -2,26 +2,26 @@
 
 /**
  * print_binary - print bin eq of  dec num
- * n: number to print in binary
+ * n: num print in bin
  */
 void print_binary(unsigned long int n)
 {
-	int j, cnt = 0;
-	unsigned long int current;
+	int j, counter = 0;
+	unsigned long int crnt;
 
 	for (j = 63; j >= 0; j--)
 	{
-		cur = n >> i;
+		crnt = n >> j;
 
-		if (cur & 1)
+		if (crnt & 1)
 		{
 			_putchar('1');
 			cnt++;
 		}
-		else if (cnt)
+		else if (counter)
 			_putchar('0');
 	}
-	if (!cnt)
+	if (!counter)
 		_putchar('0');
 }
 
