@@ -2,7 +2,7 @@
 
 /**
  * binary_to_uint - convert a bin num to an unsigned int
- * b:  bin num string
+ *@b:  bin num string
  *
  * Return: num converted
  */
