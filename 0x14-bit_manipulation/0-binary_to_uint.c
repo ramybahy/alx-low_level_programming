@@ -1,15 +1,15 @@
 #include "main.h"
 
 /**
- * binary_to_uint - convert a bin num to an unsigned int
- *@b:  bin num string
+ * binary_to_uint - convert bin num to unsigned int
+ * @b: bin num strng
  *
- * Return: num converted
+ * Return:convert num
  */
 unsigned int binary_to_uint(const char *b)
 {
-	int j;
 	unsigned int value = 0;
+	int j;
 
 	if (!b)
 		return (0);
