@@ -2,15 +2,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-char *create_buffer(char *file);
-void close_file(int fd);
+char *create_buffer(char *fle);
+void close_file(int ws);
 
 /**
  * create_buffer - 1024 bytes allocate buffer.
  * @file: file nm
  * Return: new buffer
  */
-char *create_buffer(char *file)
+char *create_buffer(char *fle)
 {
 	char *bfr;
 
@@ -19,7 +19,7 @@ char *create_buffer(char *file)
 	if (bfr == NULL)
 	{
 		dprintf(STDERR_FILENO,
-			"Error: Can't write to %s\n", file);
+			"Error: Can't write to %s\n", fle);
 		exit(99);
 	}
 
@@ -35,7 +35,7 @@ void close_file(int ws)
 
 	if (m == -1)
 	{
-		dprintf(STDERR_FILENO, "Error: Can't close fd %d\n", ws);
+		dprintf(STDERR_FILENO, "Error: Can't close ws %d\n", ws);
 		exit(100);
 	}
 }
