@@ -1,88 +1,51 @@
 #include "main.h"
-#include <stdio.h>
-#include <stdlib.h>
-
-char *create_buffer(char *fle);
-void close_file(int ws);
 
 /**
- * create_buffer - 1024 bytes allocate buffer.
- * @file: file nm
- * Return: new buffer
+ * main - 1st pnt
+ * description: copy file cont to another
+ * @vfqc: argum num
+ * @vfqb: argum arr
+ * Return: if succeeded 0, if failed 97-100
  */
-char *create_buffer(char *fle)
-{
-	char *bfr;
-
-	bfr = malloc(sizeof(char) * 1024);
-
-	if (bfr == NULL)
-	{
-		dprintf(STDERR_FILENO,
-			"Error: Can't write to %s\n", fle);
-		exit(99);
-	}
-
-	return (bfr);
-}
-
-
-void close_file(int ws)
-{
-	int m;
-
-	m = close(ws);
-
-	if (m == -1)
-	{
-		dprintf(STDERR_FILENO, "Error: Can't close ws %d\n", ws);
-		exit(100);
-	}
-}
-
-
 int main(int vfqc, char *vfqb[])
 {
-	int port, rec, g, z;
-	char *bfr;
+	int port, rec, rd_byte, type_byte;
+	char bfr[1024];
 
 	if (vfqc != 3)
+		dprintf(STDERR_FILENO, "Usage: cp port rec\n"), exit(97);
+
+
+	port = open(vfqb[1], O_RDONLY);
+	if (port == -1)
 	{
-		dprintf(STDERR_FILENO, "Usage: cp file_from file_to\n");
-		exit(97);
+		dprintf(STDERR_FILENO, "Error: Can't read from file %s\n", vfqb[1]);
+		exit(98);
 	}
 
-	bfr = create_buffer(vfqb[2]);
-	port = open(vfqb[1], O_RDONLY);
-	g = read(port, bfr, 1024);
 	rec = open(vfqb[2], O_CREAT | O_WRONLY | O_TRUNC, 0664);
+	if (rec == -1)
+		dprintf(STDERR_FILENO, "Error: Can't write to %s\n", vfqb[2]), exit(99);
 
-	do {
-		if (port == -1 || g == -1)
-		{
-			dprintf(STDERR_FILENO,
-				"Error: Can't read from file %s\n", vfqb[1]);
-			free(bfr);
-			exit(98);
-		}
 
-		z = write(rec, bfr, g);
-		if (rec == -1 || z == -1)
-		{
-			dprintf(STDERR_FILENO,
-				"Error: Can't write to %s\n", vfqb[2]);
-			free(bfr);
-			exit(99);
-		}
+	while ((rd_byte = read(port, bfr, 1024)) > 0)
+	{
+		type_byte = write(rec, bfr, rd_byte);
+		if (type_byte == -1)
+			dprintf(STDERR_FILENO, "Error: Can't write to %s\n", vfqb[2]), exit(99);
+	}
 
-		g = read(port, bfr, 1024);
-		rec = open(vfqb[2], O_WRONLY | O_APPEND);
+	if (rd_byte == -1)
+	{
+		dprintf(STDERR_FILENO, "Error: Can't read from file %s\n", vfqb[1]);
+		exit(98);
+	}
 
-	} while (g > 0);
+	if (close(port) == -1)
+		dprintf(STDERR_FILENO, "Error: Can't close fd %d\n", port), exit(100);
 
-	free(bfr);
-	close_file(port);
-	close_file(rec);
+	if (close(rec) == -1)
+		dprintf(STDERR_FILENO, "Error: Can't close fd %d\n", rec), exit(100);
 
 	return (0);
 }
